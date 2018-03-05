@@ -9,6 +9,7 @@ import argcfg
 
 
 servers = []
+nodes = []
 
 
 def shutdown_all_servers():
@@ -22,6 +23,16 @@ def setup_all_servers():
     shutdown_all_servers()
     for s in servers:
         s.setup(True)
+
+
+def run_binaries_on_all_nodes():
+    for n in nodes:
+        n.run_binary()
+
+
+def stop_binaries_on_all_nodes():
+    for n in nodes:
+        n.stop_binary()
 
 
 try:
@@ -52,6 +63,8 @@ try:
     - servers
     - shutdown_all_servers()
     - setup_all_servers()
+    - run_binaries_on_all_nodes()
+    - stop_binaries_on_all_nodes()
     """)
 
 except SystemExit:

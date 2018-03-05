@@ -15,8 +15,8 @@ class RunAction:
         self.session_name = "{}-{}".format(ns, name)
 
 
-class KillAction:
+class StopAction:
 
     def __init__(self, ns, name):
-        self.action_type = "kill"
+        self.action_type = "stop"
         self.session_name = "{}-{}".format(ns, name)

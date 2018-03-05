@@ -2,6 +2,7 @@
 
 
 import actions
+import consts
 
 
 class Node:
@@ -26,6 +27,13 @@ class Node:
             name=self.name,
             args="--testing_arg -u -v --uselessarg",
             binary=self.server.binary.path_on_server,
-            logs=".{}.logs".format(self.name)
+            logs="{}.{}.logs".format(consts.path_on_servers, self.name)
         )
         self.server.listener.send("run", action)
+
+    def stop_binary(self):
+        action = actions.StopAction(
+            ns="dcp",
+            name=self.name
+        )
+        self.server.listener.send("stop", action)

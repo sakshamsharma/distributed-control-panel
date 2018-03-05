@@ -62,8 +62,9 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
                 return
-        elif request_path == '/kill':
+        elif request_path == '/stop':
             x = pickle.loads(data)
+            print(x.session_name)
             ex = subprocess.call(["tmux", "kill-session",
                                   "-t", x.session_name])
             if ex != 0:
