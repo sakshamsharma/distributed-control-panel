@@ -13,6 +13,7 @@ class Node:
         self.port = port
         self.http_port = http_port
         self.peers = peers
+        self.logfile = "{}.{}.logs".format(consts.path_on_servers, self.name)
 
     def __repr__(self):
         return '{} on server ({}) at port {}'.format(
@@ -27,7 +28,7 @@ class Node:
             name=self.name,
             args="--testing_arg -u -v --uselessarg",
             binary=self.server.binary.path_on_server,
-            logs="{}.{}.logs".format(consts.path_on_servers, self.name)
+            logs=self.logfile
         )
         self.server.listener.send("run", action)
 
@@ -37,3 +38,6 @@ class Node:
             name=self.name
         )
         self.server.listener.send("stop", action)
+
+    def get_logs(self):
+        self.server.tail_file(self.logfile)

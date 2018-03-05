@@ -56,6 +56,13 @@ class Server:
                                 .format(file_location_server,
                                         file_name_server)])
 
+    def tail_file(self, file_path_server):
+        try:
+            subprocess.call(["ssh", self.ip, "-t",
+                             "tail -f {}".format(file_path_server)])
+        finally:
+            pass
+
     def setup_ssh(self):
         ex = subprocess.call(["ssh-copy-id", self.ip])
         if ex != 0:
