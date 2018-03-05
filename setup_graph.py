@@ -4,7 +4,6 @@ import math
 from node import Node
 import random
 import random_connected_graph as rcg
-from consts import (path_on_servers)
 
 
 def setup_graph(args, servers):
@@ -28,7 +27,6 @@ def setup_graph(args, servers):
             node = Node(
                 name="Node-" + str(cnt),
                 server=server,
-                binary="{}/binary".format(path_on_servers),
                 port=random.randint(10000, 15000),
                 http_port=random.randint(15000, 20000),
                 peers=peers_of[cnt]

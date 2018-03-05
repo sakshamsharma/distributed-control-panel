@@ -33,7 +33,9 @@ try:
     with open(args.cfg) as f:
         cfg = json.loads(f.read())
         for entry in cfg["servers"]:
-            s = server.Server(ip=entry["ip"], name=entry["name"])
+            s = server.Server(ip=entry["ip"],
+                              binary=cfg["binary"],
+                              name=entry["name"])
             s.setup()
             s.run()
             servers.append(s)

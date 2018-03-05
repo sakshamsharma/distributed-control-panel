@@ -2,6 +2,7 @@
 
 import subprocess
 import sys
+import pickle
 import http_client
 from consts import (listener_py, listener_deps, path_on_servers)
 
@@ -23,7 +24,7 @@ class Listener:
 
     def setup(self):
         for f in listener_deps:
-            ex = self.server.copy_file(f, path_on_servers)
+            ex = self.server.copy_file(f, path_on_servers, f)
             if ex != 0:
                 err = "Error while setting up {} on {}".format(f, self.ip)
                 sys.exit(err)
@@ -49,6 +50,7 @@ class Listener:
         print("Die response from {}: {}".format(self.ip, resp))
         self.running = False
 
-    def send(self, action, data):
+    def send(self, action, py_data):
+        data = pickle.dumps(py_data)
         resp = http_client.make_post_request(self.ip, self.port, action, data)
         print("Response from {}: {}".format(self.ip, resp))

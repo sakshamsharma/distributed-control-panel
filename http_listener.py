@@ -54,6 +54,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         if request_path == '/run':
             x = pickle.loads(data)
+            print(x.shell_cmd)
             ex = subprocess.call(["tmux", "new-session",
                                   "-d", "-s",
                                   x.session_name, x.shell_cmd])
