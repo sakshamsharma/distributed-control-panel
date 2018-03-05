@@ -4,11 +4,7 @@ import random
 import subprocess
 import sys
 from listener import Listener
-
-
-path_on_servers = '~/.algorand'
-setup_cache = '.cache_setup'
-listener_py = 'tcp_listener.py'
+from consts import (path_on_servers, setup_cache)
 
 
 class Server:
@@ -34,13 +30,26 @@ class Server:
         self.ip = ip
         self.port = port
         listener_port = random.randint(20000, 25000)
-        self.listener = Listener(name, ip, listener_port)
+        self.listener = Listener(name, ip, listener_port, self)
 
     def __repr__(self):
         return '{} at {}:{}'.format(self.name, self.ip, self.port)
 
     def __str__(self):
         return self.__repr__()
+
+    def copy_file(self, file_path_local, file_path_server):
+        return subprocess.call(["scp", file_path_local,
+                                "{}:{}".format(self.ip, file_path_server)])
+
+    def copy_executable(self, file_path_local, file_location_server,
+                        file_name_server):
+        ex = self.copy_file(file_path_local, file_location_server)
+        if ex != 0:
+            return ex
+        return subprocess.call(["ssh", self.ip, "-t", "chmod +x {}/{}"
+                                .format(file_location_server,
+                                        file_name_server)])
 
     def setup_ssh(self):
         ex = subprocess.call(["ssh-copy-id", self.ip])
@@ -56,7 +65,6 @@ class Server:
                      .format(self.ip))
 
     def setup_binary(self):
-        # TODO: Incomplete.
         return
 
     def finish_setup(self):
@@ -83,6 +91,7 @@ class Server:
         print("Finished setting up server {}".format(self.ip))
 
     def run(self):
+        self.listener.setup()
         self.listener.run()
 
     def shutdown(self):

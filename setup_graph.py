@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import math
-import node
+from node import Node
 import random
 import random_connected_graph as rcg
+from consts import (path_on_servers)
 
 
 def setup_graph(args, servers):
@@ -24,14 +25,15 @@ def setup_graph(args, servers):
     for server in servers:
         done = 0
         while done < per_server_nodes and cnt < node_cnt:
-            node_ = node.Node(
+            node = Node(
                 name="Node-" + str(cnt),
-                location=server,
+                server=server,
+                binary="{}/binary".format(path_on_servers),
                 port=random.randint(10000, 15000),
                 http_port=random.randint(15000, 20000),
                 peers=peers_of[cnt]
             )
-            nodes.append(node_)
+            nodes.append(node)
             cnt += 1
             done += 1
 

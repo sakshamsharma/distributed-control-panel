@@ -2,20 +2,18 @@
 
 import subprocess
 import sys
-import tcp_client
-
-
-path_on_servers = '~/.algorand'
-listener_py = 'tcp_listener.py'
+import http_client
+from consts import (listener_py, listener_deps, path_on_servers)
 
 
 class Listener:
 
-    def __init__(self, name, ip, port):
+    def __init__(self, name, ip, port, server):
         self.name = name
         self.ip = ip
         self.port = port
         self.running = False
+        self.server = server
 
     def __repr__(self):
         return '{} at {}:{}'.format(self.name, self.ip, self.port)
@@ -24,13 +22,13 @@ class Listener:
         return self.__repr__()
 
     def setup(self):
-        ex = subprocess.call(["scp", listener_py,
-                              "{}:{}".format(self.ip, path_on_servers)])
-        if ex != 0:
-            err = "Error while setting up listener on {}".format(self.ip)
-            sys.exit(err)
-        ex = subprocess.call(["ssh", self.ip, "-t", "chmod +x {}/{}"
-                              .format(path_on_servers, listener_py)])
+        for f in listener_deps:
+            ex = self.server.copy_file(f, path_on_servers)
+            if ex != 0:
+                err = "Error while setting up {} on {}".format(f, self.ip)
+                sys.exit(err)
+        ex = self.server.copy_executable(listener_py, path_on_servers,
+                                         listener_py)
         if ex != 0:
             err = "Error while setting up listener on {}".format(self.ip)
             sys.exit(err)
@@ -47,10 +45,10 @@ class Listener:
         self.running = True
 
     def stop(self):
-        resp = tcp_client.make_request(self.ip, self.port, 'die')
-        print("Stop response from {}: {}".format(self.ip, resp))
+        resp = http_client.make_get_request(self.ip, self.port, 'die')
+        print("Die response from {}: {}".format(self.ip, resp))
         self.running = False
 
-    def send(self, data):
-        resp = tcp_client.make_request(self.ip, self.port, data)
+    def send(self, action, data):
+        resp = http_client.make_post_request(self.ip, self.port, action, data)
         print("Response from {}: {}".format(self.ip, resp))

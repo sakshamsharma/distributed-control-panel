@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import json
-import setup_graph
+from setup_graph import setup_graph
 import server
 import math
 import atexit
@@ -38,7 +38,7 @@ try:
             s.run()
             servers.append(s)
 
-    nodes = setup_graph.setup_graph(args, servers)
+    nodes = setup_graph(args, servers)
 
     print("\nServers available:")
     for s in servers:
