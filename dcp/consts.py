@@ -2,5 +2,5 @@
 
 path_on_servers = '~/.algorand'
 setup_cache = '.cache_setup'
-listener_py = 'http_listener.py'
-listener_deps = ['actions.py']
+listener_py = 'dcp/http_listener.py'
+listener_deps = ['dcp/actions.py']

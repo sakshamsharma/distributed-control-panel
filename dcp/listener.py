@@ -7,6 +7,11 @@ import http_client
 from consts import (listener_py, listener_deps, path_on_servers)
 
 
+def path_to_file(x):
+    y = x.split('/')
+    return y[len(y)-1]
+
+
 class Listener:
 
     def __init__(self, name, ip, port, server):
@@ -24,12 +29,12 @@ class Listener:
 
     def setup(self):
         for f in listener_deps:
-            ex = self.server.copy_file(f, path_on_servers, f)
+            ex = self.server.copy_file(f, path_on_servers, path_to_file(f))
             if ex != 0:
                 err = "Error while setting up {} on {}".format(f, self.ip)
                 sys.exit(err)
         ex = self.server.copy_executable(listener_py, path_on_servers,
-                                         listener_py)
+                                         path_to_file(listener_py))
         if ex != 0:
             err = "Error while setting up listener on {}".format(self.ip)
             sys.exit(err)
