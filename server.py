@@ -40,6 +40,12 @@ class Server:
     def __str__(self):
         return self.__repr__()
 
+    def run_proc(self, args):
+        if self.ip in ["127.0.0.1", "0.0.0.0", "localhost"]:
+            return subprocess.call(["bash", "-c", " ".join(args)])
+        else:
+            return subprocess.call(["ssh", self.ip, "-t", " ".join(args)])
+
     def copy_file(self, file_path_local, file_path_server, file_name_server):
         return subprocess.call(["scp", file_path_local,
                                 "{}:{}/{}".format(self.ip,
@@ -52,14 +58,12 @@ class Server:
                             file_name_server)
         if ex != 0:
             return ex
-        return subprocess.call(["ssh", self.ip, "-t", "chmod +x {}/{}"
-                                .format(file_location_server,
-                                        file_name_server)])
+        return self.run_proc(["chmod", "+x", "{}/{}".format(
+            file_location_server, file_name_server)])
 
     def tail_file(self, file_path_server):
         try:
-            subprocess.call(["ssh", self.ip, "-t",
-                             "tail -f {}".format(file_path_server)])
+            self.run_proc(["tail", "-f", file_path_server])
         finally:
             pass
 
@@ -70,8 +74,7 @@ class Server:
                      .format(self.ip))
 
     def setup_folder(self):
-        ex = subprocess.call(["ssh", self.ip, "-t",
-                              "mkdir -p {}".format(path_on_servers)])
+        ex = self.run_proc(["mkdir", "-p", path_on_servers])
         if ex != 0:
             sys.exit("Error while setting up listener on {}"
                      .format(self.ip))
