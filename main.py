@@ -6,10 +6,15 @@ import server
 import math
 import atexit
 import argcfg
+from tmux import Tmux
 
 
 servers = []
 nodes = []
+
+
+def dummy():
+    Tmux()
 
 
 def shutdown_all_servers():
@@ -56,6 +61,8 @@ try:
     for n in nodes:
         n.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
 
+    logs = [n.logs for n in nodes]
+
     print("\nServers available:")
     for s in servers:
         print(s)
@@ -64,6 +71,7 @@ try:
     Available variables/methods:
     - nodes
     - servers
+    - logs
     - shutdown_all_servers()
     - setup_all_servers()
     - run_binaries_on_all_nodes()
