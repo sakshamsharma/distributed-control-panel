@@ -10,7 +10,7 @@ class RunAction:
         self.args = args
         self.binary = binary
         self.logs = logs
-        self.shell_cmd = "bash -c '{} {} > {}'".format(
+        self.shell_cmd = "bash -c '{} {} > {} 2>&1'".format(
             self.binary, self.args, self.logs)
         self.session_name = "{}-{}".format(ns, name)
 

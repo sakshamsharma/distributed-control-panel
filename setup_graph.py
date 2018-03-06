@@ -6,7 +6,7 @@ import random
 import random_connected_graph as rcg
 
 
-def setup_graph(args, servers):
+def setup_graph_return_nodes(args, servers):
     graph = rcg.get_graph(args)
 
     node_cnt = int(args.nodes)
@@ -17,6 +17,7 @@ def setup_graph(args, servers):
 
     per_server_nodes = math.ceil(node_cnt / len(servers))
 
+    print("Connections among nodes:")
     print(peers_of)
 
     nodes = []

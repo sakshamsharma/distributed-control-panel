@@ -13,7 +13,12 @@ class Node:
         self.port = port
         self.http_port = http_port
         self.peers = peers
-        self.logfile = "{}.{}.logs".format(consts.path_on_servers, self.name)
+        self.logfile = "{}/.{}.logs".format(consts.path_on_servers, self.name)
+        self.addr = self.server.ip + ":" + str(self.port)
+
+    def register_nodes(self, nodes, arg_gen):
+        peers_with_addr = [nodes[peer] for peer in self.peers]
+        self.args = eval(arg_gen)(peers_with_addr)(self)
 
     def __repr__(self):
         return '{} on server ({}) at port {}'.format(
@@ -26,7 +31,7 @@ class Node:
         action = actions.RunAction(
             ns="dcp",
             name=self.name,
-            args="--testing_arg -u -v --uselessarg",
+            args=self.args,
             binary=self.server.binary.path_on_server,
             logs=self.logfile
         )
@@ -39,5 +44,5 @@ class Node:
         )
         self.server.listener.send("stop", action)
 
-    def get_logs(self):
+    def logs(self):
         self.server.tail_file(self.logfile)

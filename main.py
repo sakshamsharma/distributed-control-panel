@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import json
-from setup_graph import setup_graph
+from setup_graph import setup_graph_return_nodes
 import server
 import math
 import atexit
@@ -39,7 +39,8 @@ try:
     args = argcfg.get_args()
     args.digraph = True
     n = int(args.nodes)
-    args.edges = min(math.ceil(float(n) * 2.5), n*(n-1))
+    if not args.edges:
+        args.edges = min(math.ceil(float(n) * 2.5), n*(n-1))
 
     with open(args.cfg) as f:
         cfg = json.loads(f.read())
@@ -51,7 +52,9 @@ try:
             s.run()
             servers.append(s)
 
-    nodes = setup_graph(args, servers)
+    nodes = setup_graph_return_nodes(args, servers)
+    for n in nodes:
+        n.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
 
     print("\nServers available:")
     for s in servers:
