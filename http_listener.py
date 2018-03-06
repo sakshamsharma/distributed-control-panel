@@ -10,6 +10,7 @@ import subprocess
 
 should_run = True
 dummy = actions.RunAction("", "", "", "", "")
+list_of_tmux_sessions_running = []
 
 
 def keep_running():
@@ -30,12 +31,15 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         if request_path == '/die':
             should_run = False
+            for sess in list_of_tmux_sessions_running:
+                subprocess.call(["tmux", "kill-session", "-t", sess])
 
         self.send_response(200)
         self.send_header("Set-Cookie", "foo=bar")
         self.end_headers()
 
     def do_POST(self):
+        global list_of_tmux_sessions_running
 
         request_path = self.path
 
@@ -62,6 +66,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
                 return
+            list_of_tmux_sessions_running.append(x.session_name)
         elif request_path == '/stop':
             x = pickle.loads(data)
             print(x.session_name)
@@ -71,6 +76,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
                 return
+            list_of_tmux_sessions_running.remove(x.session_name)
 
         self.send_response(200)
         self.end_headers()
