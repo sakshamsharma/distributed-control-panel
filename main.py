@@ -76,6 +76,7 @@ try:
     - setup_all_servers()
     - run_binaries_on_all_nodes()
     - stop_binaries_on_all_nodes()
+    - Tmux.ls(?server)
     """)
 
 except SystemExit:
