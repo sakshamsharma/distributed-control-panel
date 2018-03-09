@@ -1,5 +1,15 @@
 # distributed-control-panel
-distributed-control-panel (henceforth DCP) is a python-based control panel to launch, control, and view distributed applications across machines.
+
+```
+______  _____ ______
+|  _  \/  __ \| ___ \
+| | | || /  \/| |_/ /
+| | | || |    |  __/
+| |/ / | \__/\| |
+|___/   \____/\_|
+```
+
+distributed-control-panel (henceforth DCP) is a python-based control panel to launch, control, and view distributed applications across machines. This is done via providing an abstraction over instances of the distributed application, and over available servers, to provide a central Python shell for all interactions with the application's instances.
 
 # Usecase
 Building, testing, and showing demos of distributed p2p applications is a painful job. DCP attemps to change this.
@@ -11,7 +21,7 @@ Furthermore, you get easy access to logs of each instance, full control over the
 
 All this is done inside an interactive Python shell, which means you can interact with the outputs in whatever way you like, within the comfort of Python.
 
-A (potentially outdated) list of useful variables is shown here:
+A (potentially outdated) list of useful variables available at runtime:
 - nodes
 - servers
 - logs
@@ -21,12 +31,15 @@ A (potentially outdated) list of useful variables is shown here:
 - stop_binaries_on_all_nodes()
 - Tmux.ls(?server)
 
-All processes are run inside tmux sessions, and the scripts are written for python 3.
-
-Each node is an instance of the Node class, and each server is an instance of the Server class. These provide many more utility functions, which you can look into. Documentation for the same will be available in the future.
-
 # Running
 ```
 ./dcp.sh --help
 ./dcp.sh --cfg=config.json --nodes=3 --edges=5
 ```
+
+## Notes
+- The list of available variables is displayed on startup as well.
+- All processes are run inside tmux sessions.
+- The scripts are written for python 3.
+- Each node is an instance of the Node class, and each server is an instance of the Server class.
+- The classes `Node` and `Server` provide many more utility functions, which you can look into. This should allow boundless scripting freedom. Documentation for the same will be available in the future.
