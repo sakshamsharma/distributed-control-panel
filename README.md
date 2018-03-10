@@ -43,3 +43,4 @@ A (potentially outdated) list of useful variables available at runtime:
 - The scripts are written for python 3.
 - Each node is an instance of the Node class, and each server is an instance of the Server class.
 - The classes `Node` and `Server` provide many more utility functions, which you can look into. This should allow boundless scripting freedom. Documentation for the same will be available in the future.
+- The configuration allows you to provide a python function which outputs the cmd arguments of each node, given an instance of that node (type `Node`). See config.json for an example.

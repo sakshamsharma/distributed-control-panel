@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "Test binary output"
+echo "The provided args were:"
+echo "$@"
