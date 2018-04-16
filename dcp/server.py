@@ -42,7 +42,12 @@ class Server:
 
     def run_proc(self, args):
         if self.ip in ["127.0.0.1", "0.0.0.0", "localhost"]:
-            return subprocess.call(["bash", "-c", " ".join(args)])
+            try:
+                ex = subprocess.call(["bash", "-c", " ".join(args)])
+                return ex
+            except KeyboardInterrupt:
+                print("Process stopped by user")
+                return 0
         else:
             return subprocess.call(["ssh", self.ip, "-t", " ".join(args)])
 
