@@ -6,6 +6,16 @@ import random
 import random_connected_graph as rcg
 
 
+def create_new_node(servers, nodes):
+    return Node(
+        name="Node-" + str(len(nodes)),
+        server=random.sample(servers, 1)[0],
+        port=random.randint(10000, 15000),
+        http_port=random.randint(15000, 20000),
+        peers=nodes[0]
+    )
+
+
 def setup_graph_return_nodes(args, servers, cfg):
     node_cnt = int(args.nodes)
 

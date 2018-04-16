@@ -84,6 +84,12 @@ class Server:
             sys.exit("Error while setting up main data folder on {}"
                      .format(self.ip))
 
+    def clear_logs(self):
+        ex = self.run_proc(["bash", "-c",
+                            "'rm {}/.*logs'".format(path_on_servers)])
+        if ex != 0:
+            sys.exit("Error while clearing logs on {}" .format(self.ip))
+
     def finish_setup(self):
         with open(setup_cache, "a") as f:
             f.write("{}\n".format(self.ip))
@@ -103,6 +109,7 @@ class Server:
         print("Setting up server {}".format(self.ip))
         self.setup_ssh()
         self.setup_folder()
+        self.clear_logs()
         self.finish_setup()
         print("Finished setting up server {}".format(self.ip))
 

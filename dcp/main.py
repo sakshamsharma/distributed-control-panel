@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import json
-from setup_graph import setup_graph_return_nodes
+import setup_graph
 import server
 import math
 import atexit
@@ -33,6 +33,8 @@ def setup_all_servers():
 
 
 def run_binaries_on_all_nodes():
+    for s in servers:
+        s.clear_logs()
     for n in nodes:
         n.run_binary()
 
@@ -40,6 +42,15 @@ def run_binaries_on_all_nodes():
 def stop_binaries_on_all_nodes():
     for n in nodes:
         n.stop_binary()
+
+
+def add_new_node():
+    global nodes, logs
+    node = setup_graph.create_new_node(servers, nodes)
+    node.peers = [nodes[0]]
+    node.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
+    nodes.append(node)
+    logs.append(node.logs)
 
 
 def set_node_cnt(n):
@@ -60,7 +71,7 @@ def set_node_cnt(n):
                 s.run()
                 servers.append(s)
 
-        nodes = setup_graph_return_nodes(args, servers, cfg)
+        nodes = setup_graph.setup_graph_return_nodes(args, servers, cfg)
         for n in nodes:
             n.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
 
