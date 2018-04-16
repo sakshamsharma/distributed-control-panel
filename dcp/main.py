@@ -11,6 +11,7 @@ from tmux import Tmux
 
 servers = []
 nodes = []
+logs = []
 cfg = {}
 
 
@@ -41,46 +42,50 @@ def stop_binaries_on_all_nodes():
         n.stop_binary()
 
 
-try:
-    args = argcfg.get_args()
-    args.digraph = True
-    n = int(args.nodes)
-    if not args.edges:
-        args.edges = min(math.ceil(float(n) * 2.5), n*(n-1))
+def set_node_cnt(n):
+    global servers, nodes, cfg, logs
+    try:
+        args = argcfg.get_args()
+        args.digraph = True
+        if not args.edges:
+            args.edges = min(math.ceil(float(n) * 2.5), n*(n-1))
 
-    with open(args.cfg) as f:
-        cfg = json.loads(f.read())
-        for entry in cfg["servers"]:
-            s = server.Server(ip=entry["ip"],
-                              binary=cfg["binary"],
-                              name=entry["name"])
-            s.setup()
-            s.run()
-            servers.append(s)
+        with open(args.cfg) as f:
+            cfg = json.loads(f.read())
+            for entry in cfg["servers"]:
+                s = server.Server(ip=entry["ip"],
+                                  binary=cfg["binary"],
+                                  name=entry["name"])
+                s.setup()
+                s.run()
+                servers.append(s)
 
-    nodes = setup_graph_return_nodes(args, servers, cfg)
-    for n in nodes:
-        n.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
+        nodes = setup_graph_return_nodes(args, servers, cfg)
+        for n in nodes:
+            n.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
 
-    logs = [n.logs for n in nodes]
+        logs = [n.logs for n in nodes]
 
-    print("\nServers available:")
-    for s in servers:
-        print(s)
+        print("\nServers available:")
+        for s in servers:
+            print(s)
 
-    print("""
-    Available variables/methods:
-    - nodes
-    - servers
-    - logs
-    - shutdown_all_servers()
-    - setup_all_servers()
-    - run_binaries_on_all_nodes()
-    - stop_binaries_on_all_nodes()
-    - Tmux.ls(?server)
-    """)
+        print("""
+        Available variables/methods:
+        - nodes
+        - servers
+        - logs
+        - shutdown_all_servers()
+        - setup_all_servers()
+        - run_binaries_on_all_nodes()
+        - stop_binaries_on_all_nodes()
+        - Tmux.ls(?server)
+        """)
 
-except SystemExit:
-    shutdown_all_servers()
+    except SystemExit:
+        shutdown_all_servers()
 
+
+args = argcfg.get_args()
+set_node_cnt(int(args.nodes))
 atexit.register(shutdown_all_servers)
