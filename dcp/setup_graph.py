@@ -6,7 +6,7 @@ import random
 import random_connected_graph as rcg
 
 
-def setup_graph_return_nodes(args, servers):
+def setup_graph_return_nodes(args, servers, cfg):
     graph = rcg.get_graph(args)
 
     node_cnt = int(args.nodes)
@@ -22,6 +22,7 @@ def setup_graph_return_nodes(args, servers):
 
     nodes = []
     cnt = 0
+
     for server in servers:
         done = 0
         while done < per_server_nodes and cnt < node_cnt:
@@ -35,5 +36,17 @@ def setup_graph_return_nodes(args, servers):
             nodes.append(node)
             cnt += 1
             done += 1
+
+    if cfg["has-genesis-node"]:
+        node = Node(
+            name="Genesis-Node",
+            server=servers[0],
+            port=random.randint(10000, 15000),
+            http_port=random.randint(15000, 20000),
+            peers=[],
+            sleep_time=2
+        )
+        nodes.append(node)
+        nodes[0].peers.append(len(nodes)-1)
 
     return nodes

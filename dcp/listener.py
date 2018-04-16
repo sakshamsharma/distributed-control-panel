@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import subprocess
 import sys
 import pickle
 import http_client
@@ -42,13 +41,15 @@ class Listener:
     def run(self):
         if self.running:
             return
-        command = "tmux new-session -d -s 'ar-listen' '{}/{} {}'".format(
-            path_on_servers, listener_py, self.port)
-        ex = subprocess.call(["ssh", self.ip, "-t", command])
+        command = ["tmux", "new-session", "-d", "-s", "dcp-listen",
+                   '{}/{} {}'.format(path_on_servers,
+                                     path_to_file(listener_py), self.port)]
+        ex = self.server.run_proc(command)
         if ex != 0:
             err = "Error while running listener on {}".format(self.ip)
-            sys.exit(err)
-        self.running = True
+            print(err)
+        else:
+            self.running = True
 
     def stop(self):
         resp = http_client.make_get_request(self.ip, self.port, 'die')

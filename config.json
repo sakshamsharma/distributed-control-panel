@@ -7,4 +7,6 @@
     ],
     "binary": "test_binary",
     "arg-gen-lambda": "lambda peers_with_addr: lambda self: ('single ') + ' '.join(['--seed ' + peer.addr for peer in peers_with_addr]) + (' -p ' + str(self.port))"
+    "arg-gen-lambda": "lambda peers_with_addr: lambda self: ('single ') + ' '.join(['--seed ' + peer.addr for peer in peers_with_addr]) + (' -p ' + str(self.port))",
+    "has-genesis-node": true
 }

@@ -3,11 +3,12 @@
 
 import actions
 import consts
+import time
 
 
 class Node:
 
-    def __init__(self, name, server, port, http_port, peers):
+    def __init__(self, name, server, port, http_port, peers, sleep_time=0):
         self.name = name
         self.server = server
         self.port = port
@@ -15,6 +16,7 @@ class Node:
         self.peers = peers
         self.logfile = "{}/.{}.logs".format(consts.path_on_servers, self.name)
         self.addr = self.server.ip + ":" + str(self.port)
+        self.sleep_time = sleep_time
 
     def register_nodes(self, nodes, arg_gen):
         peers_with_addr = [nodes[peer] for peer in self.peers]
@@ -36,6 +38,7 @@ class Node:
             logs=self.logfile
         )
         self.server.listener.send("run", action)
+        time.sleep(self.sleep_time)
 
     def stop_binary(self):
         action = actions.StopAction(

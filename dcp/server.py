@@ -70,13 +70,13 @@ class Server:
     def setup_ssh(self):
         ex = subprocess.call(["ssh-copy-id", self.ip])
         if ex != 0:
-            sys.exit("Error while setting up login on server {}"
+            sys.exit("Error while setting up SSH login on server {}"
                      .format(self.ip))
 
     def setup_folder(self):
         ex = self.run_proc(["mkdir", "-p", path_on_servers])
         if ex != 0:
-            sys.exit("Error while setting up listener on {}"
+            sys.exit("Error while setting up main data folder on {}"
                      .format(self.ip))
 
     def finish_setup(self):

@@ -11,6 +11,7 @@ from tmux import Tmux
 
 servers = []
 nodes = []
+cfg = {}
 
 
 def dummy():
@@ -31,7 +32,7 @@ def setup_all_servers():
 
 
 def run_binaries_on_all_nodes():
-    for n in nodes:
+    for n in reversed(nodes):
         n.run_binary()
 
 
@@ -57,7 +58,7 @@ try:
             s.run()
             servers.append(s)
 
-    nodes = setup_graph_return_nodes(args, servers)
+    nodes = setup_graph_return_nodes(args, servers, cfg)
     for n in nodes:
         n.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
 
