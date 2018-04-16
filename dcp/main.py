@@ -32,7 +32,7 @@ def setup_all_servers():
 
 
 def run_binaries_on_all_nodes():
-    for n in reversed(nodes):
+    for n in nodes:
         n.run_binary()
 
 

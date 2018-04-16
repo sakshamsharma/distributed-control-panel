@@ -12,6 +12,9 @@ def get_parser():
                         help='filename containing node labels (one per line)'
                              'OR integer number of nodes to generate',
                         required=True)
+    parser.add_argument('--edges-per-node',
+                        help='edges per node on an average'
+                             'OR integer number of max edges for each node')
     parser.add_argument('-e', '--edges', type=int,
                         help='number of edges (default is minimum possible)')
     parser.add_argument('-l', '--loops', action='store_true',

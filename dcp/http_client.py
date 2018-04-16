@@ -27,4 +27,3 @@ def make_post_request(ip, port, path, data):
         print("Error during POST request:", e)
     finally:
         return contents
-    return contents

@@ -5,8 +5,7 @@
             "ip": "127.0.0.1"
         }
     ],
-    "binary": "test_binary",
-    "arg-gen-lambda": "lambda peers_with_addr: lambda self: ('single ') + ' '.join(['--seed ' + peer.addr for peer in peers_with_addr]) + (' -p ' + str(self.port))"
+    "binary": "/home/saksham/.local/bin/algorand-haskell-exe",
     "arg-gen-lambda": "lambda peers_with_addr: lambda self: ('single ') + ' '.join(['--seed ' + peer.addr for peer in peers_with_addr]) + (' -p ' + str(self.port))",
-    "has-genesis-node": true
+    "sequential": true
 }
