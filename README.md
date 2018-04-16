@@ -28,6 +28,7 @@ A (potentially outdated) list of useful variables available at runtime:
 - shutdown_all_servers()
 - setup_all_servers()
 - run_binaries_on_all_nodes()
+- add_new_node()
 - stop_binaries_on_all_nodes()
 - Tmux.ls(?server)
 
@@ -38,6 +39,7 @@ A (potentially outdated) list of useful variables available at runtime:
 ```
 
 ## Notes
+- This requires the `unbuffer` program to be installed. On ubuntu, it can be installed by `sudo apt-get install expect`.
 - The list of available variables is displayed on startup as well.
 - All processes are run inside tmux sessions.
 - The scripts are written for python 3.
