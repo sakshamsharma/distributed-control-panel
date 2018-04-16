@@ -44,13 +44,14 @@ def stop_binaries_on_all_nodes():
         n.stop_binary()
 
 
-def add_new_node():
+def run_new_node():
     global nodes, logs
     node = setup_graph.create_new_node(servers, nodes)
-    node.peers = [nodes[0]]
+    node.peers = [0]
     node.register_nodes(nodes=nodes, arg_gen=cfg["arg-gen-lambda"])
     nodes.append(node)
     logs.append(node.logs)
+    node.run_binary()
 
 
 def set_node_cnt(n):
